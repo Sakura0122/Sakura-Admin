@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sakura.mapper.system.SysUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.sakura.model.po.system.SysUser">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,
+        name,phone,avatar,
+        description,status,create_time,
+        create_by,update_time,update_by,
+        is_deleted,remark
+    </sql>
+
+  <select id="getUserRoleCode" resultType="java.lang.String">
+    SELECT sr.role_code
+    FROM sys_role sr
+           JOIN sys_user_role sur ON sur.role_id = sr.id
+           JOIN sys_user su ON su.id = sur.user_id
+    WHERE su.id = #{userId}
+      AND su.status = 1
+      AND su.is_deleted = 0
+      AND sr.is_deleted = 0
+      AND sur.is_deleted = 0
+  </select>
+
+  <select id="getUserComponentCode" resultType="java.lang.String">
+    select sys_menu.component
+    from sys_user_role
+           join sys_role_menu on sys_role_menu.role_id = sys_user_role.role_id
+           join sys_menu on sys_role_menu.menu_id = sys_menu.id
+    where sys_user_role.user_id = #{userId}
+      and sys_menu.status = 1
+      and sys_menu.is_deleted = 0
+      and sys_menu.type = 1;
+  </select>
+
+  <select id="getUserPermsCode" resultType="java.lang.String">
+    select sys_menu.perms
+    from sys_user_role
+           join sys_role_menu on sys_role_menu.role_id = sys_user_role.role_id
+           join sys_menu on sys_role_menu.menu_id = sys_menu.id
+    where sys_user_role.user_id = #{userId}
+      and sys_menu.status = 1
+      and sys_menu.is_deleted = 0
+  </select>
+
+</mapper>
