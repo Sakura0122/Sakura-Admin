@@ -20,7 +20,7 @@ const handleAdd = (parentId: string) => {
 }
 
 // 编辑菜单
-const handleUpdate = (row: MenuForm) => {
+const handleUpdate = (row: MenuVo) => {
   menuDialogRef.value?.editOpen(row)
 }
 

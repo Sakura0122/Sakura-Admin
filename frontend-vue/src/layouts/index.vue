@@ -24,6 +24,7 @@ const settingStore = useSettingStore()
         <el-menu
           :collapse="settingStore.fold"
           :collapse-transition="false"
+          :default-active="route.path"
           background-color="#001529"
           text-color="#fff"
         >
